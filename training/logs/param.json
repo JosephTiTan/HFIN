@@ -1,1 +1,1 @@
-{"model": "clswin_lap50", "satellite": "WV2", "epoch": 1000, "lr": 0.001, "batch_size": 4, "n_feat": 16, "n_layer": 8}
+{"model": "HFIN", "satellite": "WV2", "epoch": 1000, "lr": 0.001, "batch_size": 4, "n_feat": 16, "n_layer": 8}
