@@ -99,12 +99,10 @@ class Data(data.Dataset):
         self.ms_image_filenames = [join(data_dir_ms, x) for x in listdir(data_dir_ms) if is_image_file(x)]
         self.pan_image_filenames = [join(data_dir_pan, x) for x in listdir(data_dir_pan) if is_image_file(x)]
 
-        # self.patch_size = cfg['data']['patch_size']
+
         self.upscale_factor = upscale
         self.transform = transform
-        # self.data_augmentation = cfg['data']['data_augmentation']
-        # self.normalize = cfg['data']['normalize']
-        # self.cfg = cfg
+
 
     def __getitem__(self, index):
 
@@ -117,13 +115,6 @@ class Data(data.Dataset):
             (int(ms_image.size[0] / self.upscale_factor), int(ms_image.size[1] / self.upscale_factor)), Image.BICUBIC)
         pan_image = pan_image.crop((0, 0, pan_image.size[0] // self.upscale_factor * self.upscale_factor,
                                     pan_image.size[1] // self.upscale_factor * self.upscale_factor))
-        # bms_image = rescale_img(lms_image, self.upscale_factor)
-
-        # ms_image, lms_image, pan_image, bms_image, _ = get_patch(ms_image, lms_image, pan_image, bms_image,
-        #                                                          self.patch_size, scale=self.upscale_factor)
-
-        # if self.data_augmentation:
-        #     ms_image, lms_image, pan_image, _ = augment(ms_image, lms_image, pan_image)
 
         if self.transform:
             ms_image = self.transform(ms_image)
@@ -131,11 +122,6 @@ class Data(data.Dataset):
             pan_image = self.transform(pan_image)
             # bms_image = self.transform(bms_image)
 
-        # if self.normalize:
-        #     ms_image = ms_image * 2 - 1
-        #     lms_image = lms_image * 2 - 1
-        #     pan_image = pan_image * 2 - 1
-        #     bms_image = bms_image * 2 - 1
 
         return lms_image, pan_image, ms_image
 
@@ -189,45 +175,3 @@ class Data_test(data.Dataset):
     def __len__(self):
         return len(self.ms_image_filenames)
 
-
-# class Data_eval(data.Dataset):
-#     def __init__(self, image_dir, upscale_factor, cfg, transform=None):
-#         super(Data_eval, self).__init__()
-#
-#         self.ms_image_filenames = [join(data_dir_ms, x) for x in listdir(data_dir_ms) if is_image_file(x)]
-#         self.pan_image_filenames = [join(data_dir_pan, x) for x in listdir(data_dir_pan) if is_image_file(x)]
-#
-#         self.upscale_factor = cfg['data']['upsacle']
-#         self.transform = transform
-#         self.data_augmentation = cfg['data']['data_augmentation']
-#         # self.normalize = cfg['data']['normalize']
-#         self.cfg = cfg
-#
-#     def __getitem__(self, index):
-#
-#         lms_image = load_img(self.ms_image_filenames[index])
-#         pan_image = load_img(self.pan_image_filenames[index])
-#         _, file = os.path.split(self.ms_image_filenames[index])
-#         lms_image = lms_image.crop((0, 0, lms_image.size[0] // self.upscale_factor * self.upscale_factor,
-#                                    lms_image.size[1] // self.upscale_factor * self.upscale_factor))
-#         pan_image = pan_image.crop((0, 0, pan_image.size[0] // self.upscale_factor * self.upscale_factor,
-#                                     pan_image.size[1] // self.upscale_factor * self.upscale_factor))
-#         # bms_image = rescale_img(lms_image, self.upscale_factor)
-#
-#         if self.data_augmentation:
-#             lms_image, pan_image, bms_image, _ = augment(lms_image, pan_image, bms_image)
-#
-#         if self.transform:
-#             lms_image = self.transform(lms_image)
-#             pan_image = self.transform(pan_image)
-#             # bms_image = self.transform(bms_image)
-#
-#         # if self.normalize:
-#         #     lms_image = lms_image * 2 - 1
-#         #     pan_image = pan_image * 2 - 1
-#         #     bms_image = bms_image * 2 - 1
-#
-#         return lms_image, pan_image, file
-#
-#     def __len__(self):
-#         return len(self.ms_image_filenames)
